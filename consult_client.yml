@@ -1,0 +1,25 @@
+name: Consulta de un cliente
+
+on:
+  push:
+    branches:
+      - main  # Se ejecutará cuando haya un 'push' en la rama principal.
+    paths:
+      - '**.py'  # Se ejecutará si se hace un push que afecta a archivos .py.
+
+jobs:
+  notify_team:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Enviar mensaje de consulta de cliente
+        run: |
+          echo "Consulta de cliente realizada. Notificando al equipo..."
+          # Crear un issue en GitHub para notificar a los miembros.
+          curl -X POST \
+            -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            -d '{"title":"Consulta de cliente realizada","body":"Se ha realizado una consulta de un cliente. Por favor, revisen los detalles."}' \
+            https://api.github.com/repos/${{ github.repository }}/issues
