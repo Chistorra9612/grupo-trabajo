@@ -1,0 +1,25 @@
+name: Crear un nuevo cliente
+
+on:
+  push:
+    branches:
+      - main  # Se ejecutará cuando haya un 'push' a la rama principal (puedes cambiar la rama si usas otra).
+    paths:
+      - '**.py'  # Se ejecutará si se hace un push que afecta a archivos .py (puedes personalizar esto).
+
+jobs:
+  notify_team:
+    runs-on: ubuntu-latest  # El flujo se ejecutará en un contenedor de Ubuntu.
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2  # Usamos esta acción para hacer un checkout del código del repositorio.
+
+      - name: Enviar mensaje de creación de cliente
+        run: |
+          echo "Creación de un nuevo cliente. Notificando al equipo..."
+          # Crear un issue en GitHub para notificar a los miembros del equipo.
+          curl -X POST \
+            -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            -d '{"title":"Nuevo cliente creado","body":"Un nuevo cliente ha sido creado. Por favor, revisen los detalles."}' \
+            https://api.github.com/repos/${{ github.repository }}/issues
