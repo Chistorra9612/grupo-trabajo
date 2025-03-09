@@ -1,0 +1,25 @@
+name: Actualización de un cliente recurrente
+
+on:
+  push:
+    branches:
+      - main  # Se ejecutará cuando haya un 'push' en la rama principal.
+    paths:
+      - '**.py'  # Se ejecutará si se hace un push que afecta a archivos .py.
+
+jobs:
+  notify_team:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Enviar mensaje de actualización de cliente
+        run: |
+          echo "Actualización de un cliente recurrente. Notificando al equipo..."
+          # Crear un issue en GitHub para notificar a los miembros.
+          curl -X POST \
+            -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            -d '{"title":"Cliente recurrente actualizado","body":"Un cliente recurrente ha sido actualizado. Por favor, revisen los detalles de la actualización."}' \
+            https://api.github.com/repos/${{ github.repository }}/issues
